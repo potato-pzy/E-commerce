@@ -26,4 +26,4 @@ EXPOSE 8000
 # ENV DJANGO_SETTINGS_MODULE=E-commerce.settings
 
 # Entrypoint: Run migrations, then start server
-CMD ["sh", "-c", "python manage.py migrate && gunicorn E-commerce.wsgi:application --bind 0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && gunicorn grocery_ecommerce.wsgi:application --bind 0.0.0.0:8000"]
