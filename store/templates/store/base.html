@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Grocery Store{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2ecc71;
+            --secondary-color: #34495e;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: var(--secondary-color);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            /* transition: transform 0.2s; */
+        }
+
+        /* .card:hover {
+            transform: translateY(-5px);
+        } */
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        .list-group-item.active {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-slate-800 sticky top-0 z-50">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="{% url 'home' %}" class="flex items-center space-x-2">
+                    <i class="fas fa-shopping-basket text-green-600 text-2xl"></i>
+                    <span class="text-green-600  text-xl font-bold">Organica</span>
+                </a>
+    
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{% url 'home' %}" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-1">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'cart' %}" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-1">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Cart</span>
+                        </a>
+                        <a href="{% url 'order_history' %}" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-1">
+                            <i class="fas fa-box"></i>
+                            <span>Orders</span>
+                        </a>
+                        <form method="POST" action="{% url 'logout' %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-1">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-1">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="{% url 'signup' %}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-1">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    {% endif %}
+                  
+                </div>
+    
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden text-gray-300 hover:text-green-400 focus:outline-none" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+    
+            <!-- Mobile Navigation -->
+            <div id="mobileMenu" class="hidden md:hidden pb-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="{% url 'home' %}" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'cart' %}" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Cart</span>
+                        </a>
+                        <a href="{% url 'order_history' %}" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-1">
+                            <i class="fas fa-box"></i>
+                            <span>Orders</span>
+                        </a>
+                        <form method="POST" action="{% url 'logout' %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2 w-full">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-gray-300 hover:text-green-400 transition-colors duration-200 flex items-center space-x-2">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login</span>
+                        </a>
+                        <a href="{% url 'signup' %}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Sign Up</span>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-4">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert 
+                            {% if message.tags == 'success' %} bg-green-500 bg-opacity-75 text-white
+                            {% elif message.tags == 'error' %} bg-red-500 bg-opacity-75 text-white 
+                            {% elif message.tags == 'warning' %} bg-yellow-500 bg-opacity-75 text-black 
+                            {% elif message.tags == 'info' %} bg-blue-500 bg-opacity-75 text-white 
+                            {% else %} bg-gray-200 bg-opacity-75 text-black {% endif %}
+                            shadow-lg rounded-lg p-4 mb-4 sm:mb-6 md:mb-8 lg:mb-10 mx-4 sm:mx-6 md:mx-8 lg:mx-10 flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>{{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+    
+    
+
+    <footer class="bg-light py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p class="text-muted">&copy; 2025 Grocery Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    
+<script>
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenu.classList.toggle('hidden');
+    }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
+
+</body>
+</html>
