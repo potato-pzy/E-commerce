@@ -1,2 +1,5 @@
-Django==5.0
-Pillow==10.1.0
+Django>=5.0,<6.0
+gunicorn
+Pillow
+psycopg2-binary
+django-environ
