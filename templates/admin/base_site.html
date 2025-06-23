@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{# Inject viewport meta for responsive layout #}
+{% block extrahead %}
+    {{ block.super }}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
+{# Add our mobile-specific stylesheet #}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/admin_mobile.css' %}">
+{% endblock %} 

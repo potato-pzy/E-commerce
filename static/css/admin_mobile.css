@@ -1,0 +1,58 @@
+/* Custom mobile-friendly tweaks for Django admin */
+
+@media (max-width: 768px) {
+  body,
+  #container {
+    padding: 0 10px;
+  }
+
+  /* Make tables scrollable */
+  table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Form rows stack vertically */
+  .form-row,
+  .inline-related {
+    display: block;
+    width: 100%;
+  }
+
+  /* Full-width buttons */
+  .submit-row input {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Filters and object tools reflow */
+  #changelist-filter {
+    width: 100%;
+    margin: 0 0 1rem 0;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+  }
+
+  .object-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: 1rem;
+  }
+
+  .breadcrumbs {
+    font-size: 0.8rem;
+  }
+} 
